@@ -58,3 +58,19 @@
     font-size: 0.7rem;
     color: #64748b;
 }
+
+.btn-prestada {
+    background: var(--danger) !important;
+    color: white !important;
+    width: 100%;
+    padding: 14px;
+    border-radius: 14px;
+    text-align: center;
+    font-weight: 800;
+    display: block;
+    font-size: 0.9rem;
+    border: none;
+    cursor: not-allowed;
+    text-transform: uppercase;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}

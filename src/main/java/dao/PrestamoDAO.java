@@ -180,4 +180,88 @@ public List<Prestamo> listarMisPrestamosEnCurso(int idPre) {
             ps.setInt(1, id); return ps.executeUpdate() > 0;
         } catch (SQLException e) { return false; }
     }
+    
+public List<Prestamo> listarTodoHistorial() {
+    List<Prestamo> lista = new ArrayList<>();
+    String sql = "SELECT p.*, h.nombre as nom_h, u.nombre as nom_u " +
+                 "FROM prestamos p " +
+                 "JOIN herramientas h ON p.id_herramienta = h.id_herramienta " +
+                 "JOIN usuarios u ON p.id_usuario = u.id " +
+                 "ORDER BY p.id DESC";
+    try (Connection cn = Conexion.getConexion(); PreparedStatement ps = cn.prepareStatement(sql)) {
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            Prestamo p = new Prestamo();
+            p.setId(rs.getInt("id"));
+            p.setNombreHerramienta(rs.getString("nom_h"));
+            p.setNombreSolicitante(rs.getString("nom_u"));
+            p.setEstado(rs.getString("estado"));
+            p.setFecha_inicio(rs.getDate("fecha_inicio"));
+            p.setCalificacion(rs.getString("calificacion"));
+            p.setId_usuario(rs.getInt("id_usuario")); 
+            lista.add(p);
+        }
+    } catch (Exception e) { e.printStackTrace(); }
+    return lista;
+}
+
+public boolean eliminar(int id) {
+    String sql = "DELETE FROM prestamos WHERE id = ?";
+    try (Connection cn = Conexion.getConexion(); PreparedStatement ps = cn.prepareStatement(sql)) {
+        ps.setInt(1, id);
+        return ps.executeUpdate() > 0;
+    } catch (SQLException e) {
+        return false;
+    }
+}
+// 1. Lo que este usuario ha pedido a otros (Él es el solicitante)
+public List<Prestamo> listarHistorialComoSolicitante(int idUsuario) {
+    List<Prestamo> lista = new ArrayList<>();
+    String sql = "SELECT p.*, h.nombre as nom_h, u_dueno.nombre as nom_dueno " +
+                 "FROM prestamos p " +
+                 "JOIN herramientas h ON p.id_herramienta = h.id_herramienta " +
+                 "JOIN usuarios u_dueno ON h.id_usuario = u_dueno.id " +
+                 "WHERE p.id_usuario = ? ORDER BY p.id DESC";
+    try (Connection cn = Conexion.getConexion(); PreparedStatement ps = cn.prepareStatement(sql)) {
+        ps.setInt(1, idUsuario);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            Prestamo p = new Prestamo();
+            p.setId(rs.getInt("id"));
+            p.setNombreHerramienta(rs.getString("nom_h"));
+            p.setNombreDueno(rs.getString("nom_dueno")); 
+            p.setEstado(rs.getString("estado"));
+            p.setFecha_inicio(rs.getDate("fecha_inicio"));
+            p.setCalificacion(rs.getString("calificacion"));
+            lista.add(p);
+        }
+    } catch (Exception e) { e.printStackTrace(); }
+    return lista;
+}
+
+// 2. Lo que este usuario ha prestado a otros (Él es el dueño)
+public List<Prestamo> listarHistorialComoPrestamista(int idUsuario) {
+    List<Prestamo> lista = new ArrayList<>();
+    String sql = "SELECT p.*, h.nombre as nom_h, u_solic.nombre as nom_solic " +
+                 "FROM prestamos p " +
+                 "JOIN herramientas h ON p.id_herramienta = h.id_herramienta " +
+                 "JOIN usuarios u_solic ON p.id_usuario = u_solic.id " +
+                 "WHERE h.id_usuario = ? ORDER BY p.id DESC";
+    try (Connection cn = Conexion.getConexion(); PreparedStatement ps = cn.prepareStatement(sql)) {
+        ps.setInt(1, idUsuario);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            Prestamo p = new Prestamo();
+            p.setId(rs.getInt("id"));
+            p.setNombreHerramienta(rs.getString("nom_h"));
+            p.setNombreSolicitante(rs.getString("nom_solic"));
+            p.setEstado(rs.getString("estado"));
+            p.setFecha_inicio(rs.getDate("fecha_inicio"));
+            p.setCalificacion(rs.getString("calificacion"));
+            lista.add(p);
+        }
+    } catch (Exception e) { e.printStackTrace(); }
+    return lista;
+}
+
 }

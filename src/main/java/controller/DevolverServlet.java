@@ -23,7 +23,6 @@ public class DevolverServlet extends HttpServlet {
         int idPrestamo = Integer.parseInt(request.getParameter("id"));
         PrestamoDAO pDao = new PrestamoDAO();
         
-        // Aquí es donde ocurría el error. Ahora el método existe en el DAO.
         boolean exito = pDao.actualizarEstadoPrestamo(idPrestamo, "Devuelto");
 
         if (exito) {

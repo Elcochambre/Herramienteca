@@ -3,7 +3,7 @@ package com.mycompany.herramientateca.model;
 import java.util.Date;
 
 /**
- * Modelo de Herramienta con soporte para fecha de retorno de préstamos.
+ * Modelo de Herramienta con soporte para prestatario y fecha de retorno.
  * @author Luis
  */
 public class Herramienta {
@@ -14,10 +14,11 @@ public class Herramienta {
     private int idUsuario;
     private String disponibilidad;
     
-    // CAMPOS EXTRA PARA LA BÚSQUEDA Y LÓGICA DE PRÉSTAMOS
+    // CAMPOS EXTRA PARA LA LÓGICA DE NEGOCIO
     private String nombreDueno;
     private String reputacionDueno;
-    private Date fechaRetorno; // Campo crítico para la disponibilidad
+    private Date fechaRetorno; 
+    private String prestatario; // Nuevo campo para el nombre de quien la tiene
 
     public Herramienta() {}
 
@@ -48,4 +49,17 @@ public class Herramienta {
 
     public Date getFechaRetorno() { return fechaRetorno; }
     public void setFechaRetorno(Date fechaRetorno) { this.fechaRetorno = fechaRetorno; }
+
+    public String getPrestatario() { return prestatario; }
+    public void setPrestatario(String prestatario) { this.prestatario = prestatario; }
+    
+   
+private String ultimoPrestatario;
+private int diasUltimoPrestamo;
+
+
+public String getUltimoPrestatario() { return ultimoPrestatario; }
+public void setUltimoPrestatario(String u) { this.ultimoPrestatario = u; }
+public int getDiasUltimoPrestamo() { return diasUltimoPrestamo; }
+public void setDiasUltimoPrestamo(int d) { this.diasUltimoPrestamo = d; }
 }

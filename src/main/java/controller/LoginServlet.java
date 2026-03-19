@@ -27,7 +27,6 @@ public class LoginServlet extends HttpServlet {
         String pass = request.getParameter("txtPassword");
         
         UsuarioDAO dao = new UsuarioDAO();
-        // CAMBIO AQUÍ: Antes decía validar, ahora dice login
         Usuario user = dao.login(email, pass);
         
         if (user != null) {

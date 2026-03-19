@@ -48,4 +48,9 @@ public class Prestamo {
     public void setNombreSolicitante(String nombreSolicitante) { this.nombreSolicitante = nombreSolicitante; }
     public String getEmailDuenio() { return emailDuenio; }
     public void setEmailDuenio(String emailDuenio) { this.emailDuenio = emailDuenio; }
+    
+private String nombreDueno;
+
+public String getNombreDueno() { return nombreDueno; }
+public void setNombreDueno(String nombreDueno) { this.nombreDueno = nombreDueno; }
 }

@@ -21,7 +21,7 @@ public class ValidarDevolucionServlet extends HttpServlet {
             throws ServletException, IOException {
         
         try {
-            // 1. Recogemos los IDs (asegúrate de que los nombres coincidan con el JSP)
+            // 1. Recogemos los IDs
             int idPrestamo = Integer.parseInt(request.getParameter("txtIdPrestamo"));
             int idVecino = Integer.parseInt(request.getParameter("txtIdVecino"));
             String calificacion = request.getParameter("rbCalificacion"); // "Verde", "Amarillo" o "Rojo"

@@ -1,43 +1,33 @@
-
 package com.mycompany.herramientateca.controller;
+
+import com.mycompany.herramientateca.util.Conexion;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.*;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 
 /**
  *
  * @author Luis
  */
 
-import com.mycompany.herramientateca.dao.PrestamoDAO;
-import java.io.IOException;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession; // <--- Importación que faltaba
 
-@WebServlet(name = "BorrarPrestamoServlet", urlPatterns = {"/BorrarPrestamoServlet"})
+@WebServlet("/BorrarPrestamoServlet")
 public class BorrarPrestamoServlet extends HttpServlet {
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
-        // 1. Obtenemos el ID del préstamo a borrar
-        String idStr = request.getParameter("id");
-        
-        if (idStr != null) {
-            int id = Integer.parseInt(idStr);
-            PrestamoDAO pDao = new PrestamoDAO();
-            
-            // 2. Ejecutamos el borrado
-            pDao.eliminar(id);
-            
-            // 3. Actualizamos la lista de la sesión para que el dashboard se refresque
-            HttpSession session = request.getSession();
-            session.setAttribute("todosPrestamos", pDao.listarTodoHistorial());
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        try (Connection cn = Conexion.getConexion()) {
+            String sql = "DELETE FROM prestamos WHERE id = ?";
+            PreparedStatement ps = cn.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            // VOLVEMOS AL SERVLET para que recargue las listas de la sesión
+            response.sendRedirect("AdminDashboardServlet?msj=Registro eliminado");
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect("AdminDashboardServlet?error=No se pudo eliminar");
         }
-        
-        // 4. Volvemos al panel de administración
-        response.sendRedirect("adminDashboard.jsp");
     }
 }

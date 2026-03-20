@@ -1,43 +1,40 @@
 package com.mycompany.herramientateca.controller;
-/**
- *
- * @author Luis
- */
 
-
-import com.mycompany.herramientateca.dao.PrestamoDAO; 
-import java.io.IOException;
+import com.mycompany.herramientateca.dao.PrestamoDAO;
+import com.mycompany.herramientateca.dao.UsuarioDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.*;
+import java.io.IOException;
 
 @WebServlet("/ValidarDevolucionServlet")
 public class ValidarDevolucionServlet extends HttpServlet {
-
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            // 1. Recogemos los IDs
-            int idPrestamo = Integer.parseInt(request.getParameter("txtIdPrestamo"));
-            int idVecino = Integer.parseInt(request.getParameter("txtIdVecino"));
-            String calificacion = request.getParameter("rbCalificacion"); // "Verde", "Amarillo" o "Rojo"
-            
+            int idP = Integer.parseInt(request.getParameter("id"));
+            int idH = Integer.parseInt(request.getParameter("idH"));
+            String voto = request.getParameter("voto");
+
             PrestamoDAO pDao = new PrestamoDAO();
+            
+            // 1. Buscamos quién es el usuario al que estamos votando
+            int idUsuarioVotado = pDao.obtenerIdSolicitantePorPrestamo(idP);
 
-            // 2. Ejecutamos la validación (Finaliza préstamo + Libera herramienta + Cambia reputación)
-            boolean exito = pDao.validarDevolucion(idPrestamo, calificacion, idVecino);
-
-            if (exito) {
-                response.sendRedirect("principal.jsp?msj=Devolucion completada y vecino puntuado");
+            // 2. Guardamos el voto en el préstamo y liberamos la herramienta
+            if (pDao.finalizarYVotar(idP, idH, voto)) {
+                
+                // 3. ACTUALIZACIÓN DE COLOR: Cambiamos la reputación del usuario en su ficha
+                UsuarioDAO uDao = new UsuarioDAO();
+                uDao.actualizarReputacionManual(idUsuarioVotado, voto);
+                
+                response.sendRedirect("principal.jsp?msj=Voto registrado y herramienta disponible");
             } else {
-                response.sendRedirect("principal.jsp?error=No se pudo actualizar la base de datos");
+                response.sendRedirect("principal.jsp?error=Fallo al guardar el voto");
             }
-        } catch (NumberFormatException e) {
-            response.sendRedirect("principal.jsp?error=Error en el formato de los datos");
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect("principal.jsp?error=Error procesando la peticion");
         }
     }
 }

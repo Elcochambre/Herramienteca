@@ -53,7 +53,7 @@
                 <div class="vote-item">
                     <div class="badge rep-<%= p.getCalificacion() %>"><%= p.getCalificacion() %></div>
                     <div class="vote-info">
-                        <div style="font-weight: 700;">Valorado por: <%= p.getNombreSolicitante() %></div>
+                        <div style="font-weight: 700;">Valorado por: <%= (p.getNombreDueno() != null) ? p.getNombreDueno() : "Vecino" %></div>
                         <div style="font-size: 0.8rem; color: #64748b;">Herramienta: <%= p.getNombreHerramienta() %></div>
                     </div>
                 </div>

@@ -59,6 +59,21 @@
     </style>
 </head>
 <body>
+    <%-- Cerca de donde muestras el nombre o el ID del usuario --%>
+<div style="margin-bottom: 20px; padding: 15px; border-radius: 12px; background: <%= (u.getBloqueado() == 1) ? "#fee2e2" : "#dcfce7" %>;">
+    <p style="margin:0; font-weight: 800; color: <%= (u.getBloqueado() == 1) ? "#991b1b" : "#166534" %>;">
+        ESTADO DE CUENTA: <%= (u.getBloqueado() == 1) ? "🚫 BLOQUEADO POR MAL USO" : "✅ ACTIVO" %>
+    </p>
+    
+    <% if(u.getBloqueado() == 1) { %>
+        <a href="DesbloquearUsuarioServlet?id=<%= u.getId() %>" 
+           class="btn btn-success" 
+           style="margin-top: 10px; display: inline-block;"
+           onclick="return confirm('¿Deseas restaurar el acceso a este usuario?')">
+           🔓 DESBLOQUEAR USUARIO
+        </a>
+    <% } %>
+</div>
     <div style="max-width: 1000px; margin: 0 auto;">
         <a href="AdminServlet" style="text-decoration:none; font-weight:800; color:#64748b;">← Volver al Panel General</a>
         

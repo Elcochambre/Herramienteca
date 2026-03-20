@@ -1,56 +1,68 @@
 package com.mycompany.herramientateca.model;
 
-import java.sql.Date;
+import java.util.Date; // CAMBIADO: Antes era java.sql.Date (que no guarda horas)
 
 public class Prestamo {
     private int id;
-    private int id_herramienta;
-    private int id_usuario; // El que solicita
-    private Date fecha_inicio;
-    private Date fecha_fin;
-    private String validacion;
-    private int dias_solicitados;
+    private int idHerramienta;
+    private int idUsuario;    // El vecino que pide la herramienta
+    private int idDueno;      // El dueño de la herramienta
+    private Date fechaInicio; // Ahora guarda Día/Mes/Año y Hora:Minuto
+    private Date fechaFin;    // Igual que el anterior
+    private int diasSolicitados;
     private String estado;
-    private String foto_devolucion;
     private String calificacion;
+    private String emailDueno; // Nuevo campo
+
+public String getEmailDueno() { return emailDueno; }
+public void setEmailDueno(String emailDueno) { this.emailDueno = emailDueno; }
+
+private String valoracionDueno;
+
+public String getValoracionDueno() { return valoracionDueno; }
+public void setValoracionDueno(String valoracionDueno) { this.valoracionDueno = valoracionDueno; }
     
-    // Campos extra para mostrar nombres en el JSP (Joins)
+    // Campos extra para mostrar nombres en los JSP sin hacer más consultas
     private String nombreHerramienta;
     private String nombreSolicitante;
-    private String emailDuenio;
+    private String nombreDueno;
 
     public Prestamo() {}
 
-    // Getters y Setters (Absolutamente todos)
+    // --- GETTERS Y SETTERS ACTUALIZADOS CON JAVA.UTIL.DATE ---
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
-    public int getId_herramienta() { return id_herramienta; }
-    public void setId_herramienta(int id_herramienta) { this.id_herramienta = id_herramienta; }
-    public int getId_usuario() { return id_usuario; }
-    public void setId_usuario(int id_usuario) { this.id_usuario = id_usuario; }
-    public Date getFecha_inicio() { return fecha_inicio; }
-    public void setFecha_inicio(Date fecha_inicio) { this.fecha_inicio = fecha_inicio; }
-    public Date getFecha_fin() { return fecha_fin; }
-    public void setFecha_fin(Date fecha_fin) { this.fecha_fin = fecha_fin; }
-    public String getValidacion() { return validacion; }
-    public void setValidacion(String validacion) { this.validacion = validacion; }
-    public int getDias_solicitados() { return dias_solicitados; }
-    public void setDias_solicitados(int dias_solicitados) { this.dias_solicitados = dias_solicitados; }
+
+    public int getIdHerramienta() { return idHerramienta; }
+    public void setIdHerramienta(int idHerramienta) { this.idHerramienta = idHerramienta; }
+
+    public int getIdUsuario() { return idUsuario; }
+    public void setIdUsuario(int idUsuario) { this.idUsuario = idUsuario; }
+
+    public int getIdDueno() { return idDueno; }
+    public void setIdDueno(int idDueno) { this.idDueno = idDueno; }
+
+    public Date getFechaInicio() { return fechaInicio; }
+    public void setFechaInicio(Date fechaInicio) { this.fechaInicio = fechaInicio; }
+
+    public Date getFechaFin() { return fechaFin; }
+    public void setFechaFin(Date fechaFin) { this.fechaFin = fechaFin; }
+
+    public int getDiasSolicitados() { return diasSolicitados; }
+    public void setDiasSolicitados(int diasSolicitados) { this.diasSolicitados = diasSolicitados; }
+
     public String getEstado() { return estado; }
     public void setEstado(String estado) { this.estado = estado; }
-    public String getFoto_devolucion() { return foto_devolucion; }
-    public void setFoto_devolucion(String foto_devolucion) { this.foto_devolucion = foto_devolucion; }
+
     public String getCalificacion() { return calificacion; }
     public void setCalificacion(String calificacion) { this.calificacion = calificacion; }
+
     public String getNombreHerramienta() { return nombreHerramienta; }
     public void setNombreHerramienta(String nombreHerramienta) { this.nombreHerramienta = nombreHerramienta; }
+
     public String getNombreSolicitante() { return nombreSolicitante; }
     public void setNombreSolicitante(String nombreSolicitante) { this.nombreSolicitante = nombreSolicitante; }
-    public String getEmailDuenio() { return emailDuenio; }
-    public void setEmailDuenio(String emailDuenio) { this.emailDuenio = emailDuenio; }
-    
-private String nombreDueno;
 
-public String getNombreDueno() { return nombreDueno; }
-public void setNombreDueno(String nombreDueno) { this.nombreDueno = nombreDueno; }
+    public String getNombreDueno() { return nombreDueno; }
+    public void setNombreDueno(String nombreDueno) { this.nombreDueno = nombreDueno; }
 }
